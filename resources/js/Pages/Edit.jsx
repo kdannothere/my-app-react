@@ -1,0 +1,47 @@
+import { Head, useForm } from "@inertiajs/react";
+
+export default function Edit({post}) {
+    const { data, setData, put, errors, processing } = useForm({
+        body: post.body,
+    });
+
+    function submit(e) {
+        e.preventDefault();
+        put(`/posts/${post.id}`);
+    }
+
+    return (
+        <>
+            <Head title="Edit" />
+            <h1 className="title font-bold text-lg my-8 text-center">
+                Update your post
+            </h1>
+
+            <div className="mx-auto w-3/4 bg-slate-300">
+                <form className="flex items-center flex-col" onSubmit={submit}>
+                    <textarea
+                        className={`resize-none mt-10 p-2 rounded w-3/4 ${
+                            errors.body && "border-red-500 border-2"
+                        }`}
+                        rows="10"
+                        value={data.body}
+                        onChange={(e) => setData("body", e.target.value)}
+                    ></textarea>
+
+                    {errors.body && (
+                        <p className="error text-red-500 text-sm font-semibold mt-4">
+                            {errors.body}
+                        </p>
+                    )}
+
+                    <button
+                        className="block my-4 px-4 py-1 disabled:opacity-50 bg-blue-300 hover:bg-blue-400 rounded"
+                        disabled={processing}
+                    >
+                        Update Post
+                    </button>
+                </form>
+            </div>
+        </>
+    );
+}
